@@ -13,3 +13,8 @@ export type TToken = {
     createdAt: Date
     updatedAt: Date
 }
+
+export type TChangePassword = {
+  oldPassword: string;
+  newPassword: string;
+};

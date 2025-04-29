@@ -1,15 +1,13 @@
 import { Router } from 'express';
-import { AuthRoutes } from '../app/module/Auth/auth.routs';
-import { UserRoutes } from '../app/module/user/user.routs';
-import { DonorRoutes } from '../app/module/Donor/donor.routs';
-
-
+import { AuthRoutes } from "../app/module/Auth/auth.routs";
+import { FlowerRoutes } from "../app/module/Flower/Flower.routs";
+import { UserRoutes } from "../app/module/user/user.routs";
 
 const router = Router();
 
 const moduleRoutes = [
   {
-    path: "/Auth",
+    path: "/auth",
     route: AuthRoutes,
   },
   {
@@ -18,7 +16,7 @@ const moduleRoutes = [
   },
   {
     path: "/",
-    route: DonorRoutes,
+    route: FlowerRoutes,
   },
 ];
 

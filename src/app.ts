@@ -8,10 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://blood-donner-frontend.vercel.app",
-    ],
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );
@@ -22,7 +19,7 @@ app.use(cookieParser());
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
-    Message: "Assmient-9 Is Runing",
+    Message: "Flower server Is Runing",
   });
 });
 

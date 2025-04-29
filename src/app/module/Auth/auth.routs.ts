@@ -5,9 +5,12 @@ import { Role } from "@prisma/client";
 
 const router = express.Router();
 
+router.post("/signup", AuthControllers.SignUpUser);
+
 router.post("/login", AuthControllers.LoginUser);
 
 router.post("/refresh-token", AuthControllers.refreshToken);
+router.post("/logout", AuthControllers.userLogout);
 
 router.post(
   "/change-password",
