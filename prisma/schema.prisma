@@ -1,22 +1,19 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
-  provider  = "mongodb"
-  url  	    = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
   // uncomment next line if you use Prisma <5.10
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
-
-
 // Common User Model
 model User {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  email          String   @unique
+  email          String     @unique
   password       String
   image          String?
   number         String
@@ -24,68 +21,63 @@ model User {
   homeAddress    String?
   role           Role
   status         UserStatus
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
   // Profile relations (1:1)
-  adminProfile         AdminProfile?
-  managerProfile       ManagerProfile?
-  employProfile        EmployProfile?
-  distributorProfile   DistributorProfile?
+  adminProfile       AdminProfile?
+  managerProfile     ManagerProfile?
+  employProfile      EmployProfile?
+  distributorProfile DistributorProfile?
 
   // Other role-specific fields
-  buyRecord     String[]
-  point         Int @default(0)
-  membership    Membership @default(SILVER)
-  Flower Flower[]
-
-
+  buyRecord  String[]
+  point      Int        @default(0)
+  membership Membership @default(SILVER)
+  Flower     Flower[]
 
   DistributorPayment DistributorPayment[]
-  userPayment userPayment[]
+  userPayment        userPayment[]
 }
 
 // Role-specific Profile Models
 
 model AdminProfile {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String   @unique @db.ObjectId
-  nidCardImage   String
-  fatherName     String
-  fatherNumber   String
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  user         User   @relation(fields: [userId], references: [id])
+  userId       String @unique @db.ObjectId
+  nidCardImage String
+  fatherName   String
+  fatherNumber String
 }
 
 model ManagerProfile {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String   @unique @db.ObjectId
-  nidCardImage   String
-  cvImage        String?
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String  @unique @db.ObjectId
+  nidCardImage String
+  cvImage      String?
 }
 
-
-
 model EmployProfile {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String   @unique @db.ObjectId
-  cvImage        String
-  employType      EmployType  // Intern, Permanent, Senior
-  rank           String
-  paymentType    PaymentType   // Bank/Nagod/bkash
-  paymentInfo    String[]
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String      @unique @db.ObjectId
+  cvImage     String
+  employType  EmployType // Intern, Permanent, Senior
+  rank        String
+  paymentType PaymentType // Bank/Nagod/bkash
+  paymentInfo String[]
 }
 
 model DistributorProfile {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
   user              User     @relation(fields: [userId], references: [id])
   userId            String   @unique @db.ObjectId
   payRecord         String[]
   pendingPayment    String[]
   successfulPayment String[]
 }
-
 
 // Enums
 enum Role {
@@ -123,72 +115,78 @@ enum Membership {
 
 // flower model
 model Flower {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  price          Float
-  image          String
-  description    String
-  color          String
-  category       FlowerCategory @default(FRESH)
-  FlowerType     FlowerType
-  stock          Int
-  discount       Int?
-  isAvailable    Boolean
-  rating         Float?
-  likes          Int?
-  commments      String[]
-  
-  createdBy        User? @relation(fields: [createdById], references: [id])
-  createdById      String? @db.ObjectId
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  price       Float
+  image       String
+  description String
+  color       String
+  category    FlowerCategory
+  FlowerType  FlowerType
+  stock       Int
+  discount    Int?
+  isAvailable Boolean
+  rating      Float?
+  likes       Int?
+  commments   String[]
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdBy   User?   @relation(fields: [createdById], references: [id])
+  createdById String? @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum FlowerCategory {
-  FRESH
-  DRY
+  HAPPY_MOMENTS
+  LOVE_AND_ROMANCE
+  BIRTHDAY_SPECIALS
+  CONGRATULATIONS
+  GET_WELL_SOON
+  SYMPATHY_AND_CONDOLENCES
+  THANK_YOU
+  FRIENDSHIP
+  NEW_BABY
+  ANNIVERSARY_CELEBRATIONS
 }
+
 enum FlowerType {
   PREMIUM
   REGULAR
   SPECIAL
   LIMITED
-  }
-
+}
 
 model DistributorPayment {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  FlowerName String
-  stock Int
-  price Float
-  totalPrice Float
-  number String // with wh
-  paymentType    PaymentType   // Bank/Nagod/bkash
-  paymentStatus  PaymentStatus
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String   @unique @db.ObjectId
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  FlowerName    String
+  stock         Int
+  price         Float
+  totalPrice    Float
+  number        String // with wh
+  paymentType   PaymentType // Bank/Nagod/bkash
+  paymentStatus PaymentStatus
+  user          User          @relation(fields: [userId], references: [id])
+  userId        String        @unique @db.ObjectId
 }
 
 model userPayment {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  FlowerName String
-  quantity Int
-  price Float
-  totalPrice Float
-  number String // with wh
-  paymentImage String
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  FlowerName     String
+  quantity       Int
+  price          Float
+  totalPrice     Float
+  number         String // with wh
+  paymentImage   String
   discountCoupon String
-  paymentType    PaymentType   // Bank/Nagod/bkash
-  paymentStatus PaymentStatus
+  paymentType    PaymentType // Bank/Nagod/bkash
+  paymentStatus  PaymentStatus
 
-
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String   @unique @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
 }
 
-
-enum  PaymentStatus {
+enum PaymentStatus {
   PENDING
   SUCCESS
   FAILED
