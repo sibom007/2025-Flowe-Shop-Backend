@@ -15,11 +15,7 @@ router.post(
   validateRequest(FlowerValidation.createFlowerValidation),
   FlowerController.createFLower
 );
-router.get(
-  "/all-flowers",
-  auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER),
-  FlowerController.AllFlower
-);
+router.get("/all-flowers", FlowerController.AllFlower);
 router.get(
   "/single-flower/:flowerId",
   auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER),
