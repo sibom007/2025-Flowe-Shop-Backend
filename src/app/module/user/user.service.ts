@@ -2,6 +2,7 @@ import prisma from "../../../utils/prisma";
 import { Role, User, UserStatus } from "@prisma/client";
 
 import AppError from "../../Error/AppError";
+import { ObjectId } from "mongodb";
 
 const GetAllUserIntoDB = async () => {
   const user = await prisma.user.findMany({});
@@ -9,6 +10,9 @@ const GetAllUserIntoDB = async () => {
 };
 
 export const GetUserIdIntoDB = async (id: string) => {
+  if (!ObjectId.isValid(id)) {
+    throw new Error("Invalid ObjectID format");
+  }
   const user = await prisma.user.findUnique({
     where: {
       id: id,

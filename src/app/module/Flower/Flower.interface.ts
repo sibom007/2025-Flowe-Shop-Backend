@@ -1,18 +1,21 @@
 import { FlowerCategory, FlowerType } from "@prisma/client";
 
-export interface FlowerFilter {
+export interface IFlowerFilterPayload {
   page?: number;
   limit?: number;
-  price?: number;
-  FlowerType?: FlowerType;
+  minPrice?: number | null;
+  maxPrice?: number | null;
   category?: FlowerCategory;
+  FlowerType?: FlowerType;
+  color?: string | null;
+  rating?: string | null;
+  searchInput?: string | null;
+  sort?: string | null;
 }
 
-export type FlowerFilters = {
-  price?: {
-    gte?: number;
-    lte?: number;
-  };
-  FlowerType?: FlowerType;
-  category?: FlowerCategory;
-};
+
+
+
+
+
+

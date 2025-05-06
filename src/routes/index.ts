@@ -11,11 +11,11 @@ const moduleRoutes = [
     route: AuthRoutes,
   },
   {
-    path: "/",
+    path: "/u",
     route: UserRoutes,
   },
   {
-    path: "/",
+    path: "/f",
     route: FlowerRoutes,
   },
 ];

@@ -1,7 +1,7 @@
 import { Flower, Prisma, User } from "@prisma/client";
 import prisma from "../../../utils/prisma";
 import AppError from "../../Error/AppError";
-import { FlowerFilter, FlowerFilters } from "./Flower.interface";
+import { IFlowerFilterPayload } from "./Flower.interface";
 
 export const CreateFlower = async (
   payload: Flower,
@@ -28,50 +28,106 @@ export const CreateFlower = async (
   }
 };
 
-export const AllFlower = async ({
-  page = 1,
-  limit = 10,
-  price,
-  FlowerType,
-  category,
-}: FlowerFilter): Promise<Flower[]> => {
+export const AllFlower = async (
+  payload: IFlowerFilterPayload
+): Promise<{ data: Flower[]; total: number }> => {
   try {
-    const filters: FlowerFilters = {};
+    const minPrice = Number(payload.minPrice);
+    const maxPrice = Number(payload.maxPrice);
 
-    // Validate price filter
-    if (price) {
-      filters.price = {
-        gte: price || 0,
-        lte: price || Infinity,
-      };
-    }
+    const filters: Prisma.FlowerWhereInput = {
+      ...(payload.searchInput && {
+        name: {
+          contains: payload.searchInput,
+          mode: "insensitive",
+        },
+      }),
+      ...(payload.category && { category: payload.category }),
+      ...(payload.FlowerType && { FlowerType: payload.FlowerType }),
+      ...(payload.color && {
+        color: {
+          contains: payload.color,
+          mode: "insensitive",
+        },
+      }),
+      ...(payload.rating !== undefined && {
+        rating: {
+          equals: Number(payload.rating),
+        },
+      }),
+      ...((Number.isFinite(minPrice) || Number.isFinite(maxPrice)) && {
+        price: {
+          ...(Number.isFinite(minPrice) && { gte: minPrice }),
+          ...(Number.isFinite(maxPrice) && { lte: maxPrice }),
+        },
+      }),
+    };
 
-    // Validate FlowerType filter
-    if (FlowerType) {
-      filters.FlowerType = FlowerType;
-    }
+    // // Add filters based on the payload
+    // if (payload.searchInput) {
+    //   filters.name = {
+    //     contains: payload.searchInput,
+    //     mode: "insensitive",
+    //   };
+    // }
+    // // Fliter base on category
+    // if (payload.category) {
+    //   console.log(payload.category, "category");
+    //   filters.category = payload.category;
+    // }
 
-    // Validate category filter
-    if (category) {
-      filters.category = category;
-    }
+    // // Filter based on FlowerType
+    // if (payload.FlowerType) {
+    //   filters.FlowerType = payload.FlowerType;
+    // }
+    // // Filter based on color
+    // if (payload.color) {
+    //   filters.color = {
+    //     contains: payload.color,
+    //     mode: "insensitive",
+    //   };
+    // }
+    // // Filter based on rating
+    // if (payload.rating !== undefined) {
+    //   filters.rating = {
+    //     equals: Number(payload.rating),
+    //   };
+    // }
+
+    // // Filter based on price range
+    // if (
+    //   payload.minPrice !== undefined &&
+    //   payload.maxPrice !== undefined &&
+    //   payload.minPrice !== null &&
+    //   payload.maxPrice !== null
+    // ) {
+    //   filters.price = {
+    //     gte: Number(payload.minPrice || 0),
+    //     lte: Number(payload.maxPrice || 1000),
+    //   };
+    // }
+    // Build orderBy separately
+    const orderBy: Prisma.FlowerOrderByWithRelationInput | undefined =
+      payload.sort
+        ? {
+            createdAt: payload.sort === "trending" ? "asc" : "desc",
+          }
+        : undefined;
 
     // Ensure `page` and `limit` are valid numbers
-    const validPage = Number(page) || 1; // Default to 1 if invalid
-    const validLimit = Number(limit) || 10; // Default to 10 if invalid
+    const validPage = Math.max(1, Number(payload.page) || 1);
+    const validLimit = Math.max(1, Number(payload.limit) || 10);
 
     // Pagination: Calculate skip and take based on valid values
     const skip = (validPage - 1) * validLimit;
     const take = validLimit;
 
-    // Query flowers from the database
-    const result = await prisma.flower.findMany({
-      where: filters,
-      skip,
-      take,
-    });
+    const [result, total] = await Promise.all([
+      prisma.flower.findMany({ where: filters, orderBy, skip, take }),
+      prisma.flower.count({ where: filters }),
+    ]);
 
-    return result;
+    return { data: result, total };
   } catch (error) {
     // Log the error for debugging
     console.error("Error in AllFlower function:", error);

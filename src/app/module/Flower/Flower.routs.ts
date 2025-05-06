@@ -1,9 +1,11 @@
 import express from "express";
 import { FlowerController } from "./Flower.controler";
 import auth from "../../middlewares/auth";
-import { Role } from "@prisma/client";
+
 import validateRequest from "../../middlewares/validateRequest";
 import { FlowerValidation } from "./Flower.validation";
+import { Role } from "@prisma/client";
+
 
 const router = express.Router();
 
@@ -14,7 +16,7 @@ router.post(
   FlowerController.createFLower
 );
 router.get(
-  "/all-flower",
+  "/all-flowers",
   auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER),
   FlowerController.AllFlower
 );

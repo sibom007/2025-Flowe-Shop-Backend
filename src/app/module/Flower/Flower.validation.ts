@@ -32,9 +32,23 @@ export const createFlowerValidation = z.object({
     })
     .min(1, { message: "Image URL cannot be empty" }),
 
-  category: z.enum([FlowerCategory.FRESH, FlowerCategory.DRY], {
-    required_error: "Category is required",
-  }),
+  category: z.enum(
+    [
+      FlowerCategory.ANNIVERSARY_CELEBRATIONS,
+      FlowerCategory.BIRTHDAY_SPECIALS,
+      FlowerCategory.CONGRATULATIONS,
+      FlowerCategory.FRIENDSHIP,
+      FlowerCategory.GET_WELL_SOON,
+      FlowerCategory.HAPPY_MOMENTS,
+      FlowerCategory.LOVE_AND_ROMANCE,
+      FlowerCategory.NEW_BABY,
+      FlowerCategory.SYMPATHY_AND_CONDOLENCES,
+      FlowerCategory.THANK_YOU,
+    ],
+    {
+      required_error: "Category is required",
+    }
+  ),
 
   FlowerType: z.enum(
     [
@@ -86,30 +100,52 @@ export const updateFlowerValidation = z.object({
     .min(1, { message: "Image URL cannot be empty" })
     .optional(),
 
-  category: z.enum([FlowerCategory.FRESH, FlowerCategory.DRY], {
-    required_error: "Category is required",
-  }).optional(),
+  category: z
+    .enum(
+      [
+        FlowerCategory.ANNIVERSARY_CELEBRATIONS,
+        FlowerCategory.BIRTHDAY_SPECIALS,
+        FlowerCategory.CONGRATULATIONS,
+        FlowerCategory.FRIENDSHIP,
+        FlowerCategory.GET_WELL_SOON,
+        FlowerCategory.HAPPY_MOMENTS,
+        FlowerCategory.LOVE_AND_ROMANCE,
+        FlowerCategory.NEW_BABY,
+        FlowerCategory.SYMPATHY_AND_CONDOLENCES,
+        FlowerCategory.THANK_YOU,
+      ],
+      {
+        required_error: "Category is required",
+      }
+    )
+    .optional(),
 
-  FlowerType: z.enum(
-    [
-      FlowerType.REGULAR,
-      FlowerType.PREMIUM,
-      FlowerType.SPECIAL,
-      FlowerType.LIMITED,
-    ],
-    {
-      required_error: "Flower Type is required",
-    }
-  ).optional(),
+  FlowerType: z
+    .enum(
+      [
+        FlowerType.REGULAR,
+        FlowerType.PREMIUM,
+        FlowerType.SPECIAL,
+        FlowerType.LIMITED,
+      ],
+      {
+        required_error: "Flower Type is required",
+      }
+    )
+    .optional(),
 
-  stock: z.number({
-    required_error: "Stock is required",
-  }).optional(),
+  stock: z
+    .number({
+      required_error: "Stock is required",
+    })
+    .optional(),
 
-  isAvailable: z.boolean({
-    required_error: "Availability is required",
-  }).optional(),
-})
+  isAvailable: z
+    .boolean({
+      required_error: "Availability is required",
+    })
+    .optional(),
+});
 export const FlowerValidation = {
   createFlowerValidation,
   updateFlowerValidation

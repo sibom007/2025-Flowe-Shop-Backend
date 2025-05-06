@@ -5,6 +5,7 @@ import { FlowerService } from "./Flower.service";
 
 const createFLower = catchAsync(async (req, res) => {
   const result = await FlowerService.CreateFlower(req.body, req.user);
+
   sendResponse(res, {
     statusCode: 201,
     success: true,
@@ -14,14 +15,32 @@ const createFLower = catchAsync(async (req, res) => {
 });
 
 const AllFlower = catchAsync(async (req, res) => {
-  const { page, limit, category, price, FlowerType } = req.query;
+  const {
+    page,
+    limit,
+    minPrice,
+    maxPrice,
+    selectedColor,
+    selectedSort,
+    selectedType,
+    selectedCategory,
+    selectedRating,
+    searchInput,
+  } = req.query;
+
   const result = await FlowerService.AllFlower({
     page: Number(page),
     limit: Number(limit),
-    price: Number(price),
-    FlowerType: FlowerType as FlowerType,
-    category: category as FlowerCategory,
+    minPrice: Number(minPrice),
+    maxPrice: Number(maxPrice),
+    color: selectedColor as string,
+    sort: selectedSort as string,
+    FlowerType: selectedType as FlowerType,
+    rating: selectedRating as string,
+    searchInput: searchInput as string,
+    category: selectedCategory as FlowerCategory,
   });
+
   sendResponse(res, {
     statusCode: 200,
     success: true,
