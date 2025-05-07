@@ -1,17 +1,15 @@
-import express from 'express';
-import { UserControllers } from './user.contorler';
-import auth from '../../middlewares/auth';
-import { Role } from '@prisma/client';
-
+import express from "express";
+import { UserControllers } from "./user.contorler";
+import auth from "../../middlewares/auth";
+import { Role } from "@prisma/client";
 
 const router = express.Router();
-
 
 router.get("/all-user", auth(Role.ADMIN), UserControllers.GetAllUser);
 
 router.get(
   "/:userId",
-  auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY),
+  auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER),
   UserControllers.getUserById
 );
 
@@ -32,6 +30,5 @@ router.put(
   auth(Role.ADMIN, Role.MANAGER),
   UserControllers.UpdateUserRole
 );
-
 
 export const UserRoutes = router;
