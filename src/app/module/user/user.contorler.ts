@@ -14,6 +14,16 @@ const GetAllUser = catchAsync(async (req, res) => {
   });
 });
 
+const getUserByToken = catchAsync(async (req, res) => {
+  const result = await userservise.GetUserByTokenntoDB(req.user);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "user retrieved successfully",
+    data: result,
+  });
+});
+
 const getUserById = catchAsync(async (req, res) => {
   const result = await userservise.GetUserIdIntoDB(req.params.userId);
   sendResponse(res, {
@@ -64,6 +74,7 @@ const UpdateUserRole = catchAsync(async (req, res) => {
 
 export const UserControllers = {
   GetAllUser,
+  getUserByToken,
   getUserById,
   updateUserProfile,
   UpdateUserStatus,

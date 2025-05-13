@@ -9,6 +9,39 @@ const GetAllUserIntoDB = async () => {
   return user;
 };
 
+export const GetUserByTokenntoDB = async (user: User) => {
+  if (user.id === undefined) {
+    throw new Error("User not found");
+  }
+
+  const CurrentUser = await prisma.user.findUnique({
+    where: {
+      id: user.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      image: true,
+      number: true,
+      status: true,
+      Flower: true,
+      point: true,
+      membership: true,
+      currentAddress: true,
+      homeAddress: true,
+      buyRecord: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  if (!CurrentUser) {
+    throw new AppError(400, "User not Found!");
+  }
+  return CurrentUser;
+};
+
 export const GetUserIdIntoDB = async (id: string) => {
   if (!ObjectId.isValid(id)) {
     throw new Error("Invalid ObjectID format");
@@ -74,6 +107,7 @@ const UpdateUserRoleIntoDB = async (id: string, payload: Role) => {
 
 export const userservise = {
   GetAllUserIntoDB,
+  GetUserByTokenntoDB,
   GetUserIdIntoDB,
   UpdateUserProfileIntoDB,
   UpdateUserStatusIntoDB,

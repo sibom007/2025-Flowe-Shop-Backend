@@ -8,6 +8,12 @@ const router = express.Router();
 router.get("/all-user", auth(Role.ADMIN), UserControllers.GetAllUser);
 
 router.get(
+  "/",
+  auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER, Role.DISTRIBUTOR),
+  UserControllers.getUserByToken
+);
+
+router.get(
   "/:userId",
   auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER),
   UserControllers.getUserById
