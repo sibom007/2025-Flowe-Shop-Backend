@@ -15,7 +15,12 @@ const GetAllUser = catchAsync(async (req, res) => {
 });
 
 const getUserByToken = catchAsync(async (req, res) => {
-  const result = await userservise.GetUserByTokenntoDB(req.user);
+  const token = req.query.token as string;
+  if (!token) {
+    return res.status(400).json({ message: "Token is required" });
+  }
+  
+  const result = await userservise.GetUserByTokenIntoDB(token);
   sendResponse(res, {
     statusCode: 200,
     success: true,

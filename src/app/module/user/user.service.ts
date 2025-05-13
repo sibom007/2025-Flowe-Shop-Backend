@@ -3,17 +3,18 @@ import { Role, User, UserStatus } from "@prisma/client";
 
 import AppError from "../../Error/AppError";
 import { ObjectId } from "mongodb";
+import { jwtHelpers } from "../../../helper/jwtHelpers";
 
 const GetAllUserIntoDB = async () => {
   const user = await prisma.user.findMany({});
   return user;
 };
 
-export const GetUserByTokenntoDB = async (user: User) => {
-  if (user.id === undefined) {
-    throw new Error("User not found");
+export const GetUserByTokenIntoDB = async (token: string) => {
+  const user = jwtHelpers.verifyToken(token, process.env.ACCESTOKEN_SECRET!);
+  if (!user) {
+    throw new AppError(400, "User not Found!");
   }
-
   const CurrentUser = await prisma.user.findUnique({
     where: {
       id: user.id,
@@ -26,7 +27,6 @@ export const GetUserByTokenntoDB = async (user: User) => {
       image: true,
       number: true,
       status: true,
-      Flower: true,
       point: true,
       membership: true,
       currentAddress: true,
@@ -107,7 +107,7 @@ const UpdateUserRoleIntoDB = async (id: string, payload: Role) => {
 
 export const userservise = {
   GetAllUserIntoDB,
-  GetUserByTokenntoDB,
+  GetUserByTokenIntoDB,
   GetUserIdIntoDB,
   UpdateUserProfileIntoDB,
   UpdateUserStatusIntoDB,
