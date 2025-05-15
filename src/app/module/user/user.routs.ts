@@ -15,7 +15,7 @@ router.get("/user-by-token", UserControllers.getUserByToken);
 
 router.get(
   "/:userId",
-  auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER),
+  auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.DISTRIBUTOR, Role.USER),
   UserControllers.getUserById
 );
 
