@@ -5,7 +5,11 @@ import { Role } from "@prisma/client";
 
 const router = express.Router();
 
-router.get("/all-user", auth(Role.ADMIN), UserControllers.GetAllUser);
+router.get(
+  "/all-user",
+  auth(Role.ADMIN, Role.MANAGER),
+  UserControllers.GetAllUser
+);
 
 router.get("/user-by-token", UserControllers.getUserByToken);
 
