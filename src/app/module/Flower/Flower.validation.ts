@@ -65,10 +65,6 @@ export const createFlowerValidation = z.object({
   stock: z.number({
     required_error: "Stock is required",
   }),
-
-  isAvailable: z.boolean({
-    required_error: "Availability is required",
-  }),
 });
 
 export const updateFlowerValidation = z.object({

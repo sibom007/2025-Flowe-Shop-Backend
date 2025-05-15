@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post(
   "/create-flower",
-  auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY),
+  auth(Role.ADMIN, Role.MANAGER),
   validateRequest(FlowerValidation.createFlowerValidation),
   FlowerController.createFLower
 );

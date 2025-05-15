@@ -7,6 +7,16 @@ export const CreateFlower = async (
   payload: Flower,
   user: User
 ): Promise<Flower> => {
+
+  const exFlowerr = await prisma.flower.findFirst({
+    where: {
+      name: payload.name,
+    },
+  });
+  if (exFlowerr) {
+    throw new AppError(400, "Flower with this name already exists");
+  }
+
   try {
     const result = await prisma.flower.create({
       data: {
@@ -17,8 +27,8 @@ export const CreateFlower = async (
         image: payload.image,
         category: payload.category,
         stock: payload.stock,
-        isAvailable: payload.isAvailable,
         color: payload.color,
+        isAvailable: true,
         createdById: user.id,
       },
     });
@@ -63,50 +73,6 @@ export const AllFlower = async (
       }),
     };
 
-    // // Add filters based on the payload
-    // if (payload.searchInput) {
-    //   filters.name = {
-    //     contains: payload.searchInput,
-    //     mode: "insensitive",
-    //   };
-    // }
-    // // Fliter base on category
-    // if (payload.category) {
-    //   console.log(payload.category, "category");
-    //   filters.category = payload.category;
-    // }
-
-    // // Filter based on FlowerType
-    // if (payload.FlowerType) {
-    //   filters.FlowerType = payload.FlowerType;
-    // }
-    // // Filter based on color
-    // if (payload.color) {
-    //   filters.color = {
-    //     contains: payload.color,
-    //     mode: "insensitive",
-    //   };
-    // }
-    // // Filter based on rating
-    // if (payload.rating !== undefined) {
-    //   filters.rating = {
-    //     equals: Number(payload.rating),
-    //   };
-    // }
-
-    // // Filter based on price range
-    // if (
-    //   payload.minPrice !== undefined &&
-    //   payload.maxPrice !== undefined &&
-    //   payload.minPrice !== null &&
-    //   payload.maxPrice !== null
-    // ) {
-    //   filters.price = {
-    //     gte: Number(payload.minPrice || 0),
-    //     lte: Number(payload.maxPrice || 1000),
-    //   };
-    // }
-    // Build orderBy separately
     const orderBy: Prisma.FlowerOrderByWithRelationInput | undefined =
       payload.sort
         ? {
