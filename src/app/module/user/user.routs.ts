@@ -22,14 +22,14 @@ router.post(
 );
 
 router.put(
-  "/updateUser-status/userId",
-  auth(Role.ADMIN),
+  "/update-status/:userId",
+  auth(Role.ADMIN, Role.MANAGER),
   UserControllers.UpdateUserStatus
 );
 
 router.put(
-  "/updateUser-role/:userId",
-  auth(Role.ADMIN, Role.MANAGER),
+  "/update-role/:userId",
+  auth(Role.ADMIN),
   UserControllers.UpdateUserRole
 );
 
