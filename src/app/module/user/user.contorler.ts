@@ -51,6 +51,50 @@ const updateUserProfile = catchAsync(async (req, res) => {
   });
 });
 
+const updateUserProfileImage = catchAsync(async (req, res) => {
+  const user = req.user;
+  const UpdateData = req.body;
+  const result = await userservise.UpdateUserProfileImageIntoDB(
+    user,
+    UpdateData
+  );
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User profile updated successfully",
+    data: result,
+  });
+});
+
+const updateUserProfileContactInfo = catchAsync(async (req, res) => {
+  const user = req.user;
+  const UpdateData = req.body;
+  const result = await userservise.UpdateUserProfileContactIntoDB(
+    user,
+    UpdateData
+  );
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User profile updated successfully",
+    data: result,
+  });
+});
+const updateUserProfileRoleInfo = catchAsync(async (req, res) => {
+  const user = req.user;
+  const UpdateData = req.body;
+  const result = await userservise.UpdateUserProfileRoleInfoIntoDB(
+    user,
+    UpdateData
+  );
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User profile updated successfully",
+    data: result,
+  });
+});
+
 const UpdateUserStatus = catchAsync(async (req, res) => {
   const { userId } = req.params;
   const { status } = req.body;
@@ -84,4 +128,7 @@ export const UserControllers = {
   updateUserProfile,
   UpdateUserStatus,
   UpdateUserRole,
+  updateUserProfileImage,
+  updateUserProfileContactInfo,
+  updateUserProfileRoleInfo,
 };

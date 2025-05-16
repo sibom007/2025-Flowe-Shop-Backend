@@ -105,6 +105,87 @@ const UpdateUserRoleIntoDB = async (id: string, payload: Role) => {
   return result;
 };
 
+
+const UpdateUserProfileImageIntoDB = async (
+  user: User,
+  payload: { image: string }
+) => {
+  try {
+    if (!user) {
+      throw new AppError(400, "User not found");
+    }
+
+    const result = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        image: payload.image,
+      },
+    });
+    return result;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : String(error));
+  }
+};
+
+const UpdateUserProfileContactIntoDB = async (
+  user: User,
+  payload: { number: string; homeAddress: string; currentAddress: string }
+) => {
+  try {
+    if (!user) {
+      throw new AppError(400, "User not found");
+    }
+
+    const result = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        number: payload.number,
+        homeAddress: payload.homeAddress,
+        currentAddress: payload.currentAddress,
+      },
+    });
+
+    return result;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : String(error));
+  }
+};
+
+const UpdateUserProfileRoleInfoIntoDB = async (
+  user: User,
+  payload: {
+    FatherName: string;
+    FatherNumber: string;
+    NIDNumber: string;
+    NIDFront: string;
+    NIDBack: string;
+  }
+) => {
+  try {
+    if (!user) {
+      throw new AppError(400, "User not found");
+    }
+
+    const result = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        FatherName: payload.FatherName,
+        FatherNumber: payload.FatherNumber,
+        NIDNumber: payload.NIDNumber,
+        NIDFront: payload.NIDFront,
+        NIDBack: payload.NIDBack,
+      },
+    });
+    return result;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : String(error));
+  }
+};
+
 export const userservise = {
   GetAllUserIntoDB,
   GetUserByTokenIntoDB,
@@ -112,4 +193,7 @@ export const userservise = {
   UpdateUserProfileIntoDB,
   UpdateUserStatusIntoDB,
   UpdateUserRoleIntoDB,
+  UpdateUserProfileImageIntoDB,
+  UpdateUserProfileContactIntoDB,
+  UpdateUserProfileRoleInfoIntoDB,
 };

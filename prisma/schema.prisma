@@ -5,8 +5,6 @@ generator client {
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
-  // uncomment next line if you use Prisma <5.10
-  // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 // Common User Model
@@ -16,68 +14,30 @@ model User {
   email          String     @unique
   password       String
   image          String?
-  number         String
+  number         String //(Wh)
   currentAddress String
   homeAddress    String?
+  FatherName     String?
+  FatherNumber   String?
+  NIDNumber      String?
+  NIDFront       String?
+  NIDBack        String?
   role           Role
   status         UserStatus
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
 
-  // Profile relations (1:1)
-  adminProfile       AdminProfile?
-  managerProfile     ManagerProfile?
-  employProfile      EmployProfile?
-  distributorProfile DistributorProfile?
 
   // Other role-specific fields
-  buyRecord  String[]
   point      Int        @default(0)
   membership Membership @default(SILVER)
+  
+  buyRecord  String[]
   Flower     Flower[]
-
-  DistributorPayment DistributorPayment[]
-  userPayment        userPayment[]
+  orders     Order[]
+  payments   Payment[]
 }
 
-// Role-specific Profile Models
-
-model AdminProfile {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  user         User   @relation(fields: [userId], references: [id])
-  userId       String @unique @db.ObjectId
-  nidCardImage String
-  fatherName   String
-  fatherNumber String
-}
-
-model ManagerProfile {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  user         User    @relation(fields: [userId], references: [id])
-  userId       String  @unique @db.ObjectId
-  nidCardImage String
-  cvImage      String?
-}
-
-model EmployProfile {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  user        User        @relation(fields: [userId], references: [id])
-  userId      String      @unique @db.ObjectId
-  cvImage     String
-  employType  EmployType // Intern, Permanent, Senior
-  rank        String
-  paymentType PaymentType // Bank/Nagod/bkash
-  paymentInfo String[]
-}
-
-model DistributorProfile {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  user              User     @relation(fields: [userId], references: [id])
-  userId            String   @unique @db.ObjectId
-  payRecord         String[]
-  pendingPayment    String[]
-  successfulPayment String[]
-}
 
 // Enums
 enum Role {
@@ -91,18 +51,6 @@ enum Role {
 enum UserStatus {
   ACTIVE
   BLOCKED
-}
-
-enum PaymentType {
-  BANK
-  NAGOD
-  BKASH
-}
-
-enum EmployType {
-  INTERN
-  PERMANENT
-  SENIOR
 }
 
 enum Membership {
@@ -157,33 +105,59 @@ enum FlowerType {
   LIMITED
 }
 
-model DistributorPayment {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  FlowerName    String
-  stock         Int
-  price         Float
-  totalPrice    Float
-  number        String // with wh
-  paymentType   PaymentType // Bank/Nagod/bkash
-  paymentStatus PaymentStatus
-  user          User          @relation(fields: [userId], references: [id])
-  userId        String        @unique @db.ObjectId
+// Payment model
+model Payment {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  amount      Float
+  paymentId   String
+  status      PaymentStatus
+  PaymentType PaymentType
+  paymentDate DateTime
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  userId      String         @db.ObjectId
+  user        User           @relation(fields: [userId], references: [id])
 }
 
-model userPayment {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  FlowerName     String
-  quantity       Int
-  price          Float
-  totalPrice     Float
-  number         String // with wh
-  paymentImage   String
-  discountCoupon String
-  paymentType    PaymentType // Bank/Nagod/bkash
-  paymentStatus  PaymentStatus
+// Order model
+model Order {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  FlowerId    String         @db.ObjectId
+  TotalPrice  String
+  Quantity    String
+  PaymentType PaymentType
+  PaymentStatus PaymentStatus
+  OrderDate   DateTime       @default(now())
+  DeliveryDate DateTime?
+  DeliveryAddress String
+  DeliveryStatus DeliveryStatus
+  DeliveryCharge Float
+  OrderStatus OrderStatus
+  creaatedAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  userId      String         @db.ObjectId
+  user        User           @relation(fields: [userId], references: [id])
+}
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique @db.ObjectId
+
+enum DeliveryStatus {
+  PENDING
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+}
+
+enum PaymentType {
+  CASH_ON_DELIVERY
+  BKASH
+  NAGAD
 }
 
 enum PaymentStatus {

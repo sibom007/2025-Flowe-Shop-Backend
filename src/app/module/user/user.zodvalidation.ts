@@ -27,11 +27,27 @@ const createUser = z.object({
 });
 
 
+const UpdateImage = z.object({
+  image: z.string().url().optional(),
+});
 
+const UpdateContactInfo = z.object({
+  number: z.string().optional(),
+  homeAddress: z.string().optional(),
+  currentAddress: z.string().optional(),
+});
 
-
+const UdpateRoleInfo = z.object({
+  FatherName: z.string().optional(),
+  FatherNumber: z.string().optional(),
+  NIDNumber: z.string().optional(),
+  NIDFront: z.string().url().optional(),
+  NIDBack: z.string().url().optional(),
+});
 
 export const userValidation = {
-    createUser,
-
-} 
+  createUser,
+  UpdateImage,
+  UpdateContactInfo,
+  UdpateRoleInfo,
+}; 
