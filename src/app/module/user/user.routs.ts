@@ -42,7 +42,7 @@ router.patch(
 router.patch(
   "/update-userProfile/roleInfo",
   auth(Role.ADMIN, Role.MANAGER, Role.EMPLOY, Role.USER),
-  validateRequest(userValidation.UdpateRoleInfo),
+  validateRequest(userValidation.UpdateRoleInfo),
   UserControllers.updateUserProfileRoleInfo
 );
 

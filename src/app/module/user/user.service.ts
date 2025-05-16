@@ -114,14 +114,14 @@ const UpdateUserProfileImageIntoDB = async (
     if (!user) {
       throw new AppError(400, "User not found");
     }
-
-    const result = await prisma.user.update({
+    await prisma.user.update({
       where: { id: user.id },
       data: {
         image: payload.image,
       },
     });
-    return result;
+
+    return;
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }
@@ -129,25 +129,29 @@ const UpdateUserProfileImageIntoDB = async (
 
 const UpdateUserProfileContactIntoDB = async (
   user: User,
-  payload: { number: string; homeAddress: string; currentAddress: string }
+  payload: {
+    phoneNumber: string;
+    homeAddress: string;
+    currentAddress: string;
+  }
 ) => {
   try {
     if (!user) {
       throw new AppError(400, "User not found");
     }
 
-    const result = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: user.id,
       },
       data: {
-        number: payload.number,
+        number: payload.phoneNumber,
         homeAddress: payload.homeAddress,
         currentAddress: payload.currentAddress,
       },
     });
 
-    return result;
+    return;
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }
@@ -168,7 +172,7 @@ const UpdateUserProfileRoleInfoIntoDB = async (
       throw new AppError(400, "User not found");
     }
 
-    const result = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: user.id,
       },
@@ -180,7 +184,7 @@ const UpdateUserProfileRoleInfoIntoDB = async (
         NIDBack: payload.NIDBack,
       },
     });
-    return result;
+    return;
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }

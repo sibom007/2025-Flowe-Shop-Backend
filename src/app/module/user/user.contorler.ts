@@ -54,44 +54,45 @@ const updateUserProfile = catchAsync(async (req, res) => {
 const updateUserProfileImage = catchAsync(async (req, res) => {
   const user = req.user;
   const UpdateData = req.body;
-  const result = await userservise.UpdateUserProfileImageIntoDB(
-    user,
-    UpdateData
-  );
+  await userservise.UpdateUserProfileImageIntoDB(user, UpdateData);
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "User profile updated successfully",
-    data: result,
+    message: "User profile Image updated successfully",
+    data: [],
   });
 });
 
 const updateUserProfileContactInfo = catchAsync(async (req, res) => {
   const user = req.user;
-  const UpdateData = req.body;
-  const result = await userservise.UpdateUserProfileContactIntoDB(
-    user,
-    UpdateData
-  );
+  const { phoneNumber, currentAddress, homeAddress } = req.body;
+  await userservise.UpdateUserProfileContactIntoDB(user, {
+    phoneNumber,
+    currentAddress,
+    homeAddress,
+  });
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "User profile updated successfully",
-    data: result,
+    message: "User profile contact updated successfully",
+    data: [],
   });
 });
 const updateUserProfileRoleInfo = catchAsync(async (req, res) => {
   const user = req.user;
-  const UpdateData = req.body;
-  const result = await userservise.UpdateUserProfileRoleInfoIntoDB(
-    user,
-    UpdateData
-  );
+  const { FatherName, FatherNumber, NIDNumber, NIDFront, NIDBack } = req.body;
+  await userservise.UpdateUserProfileRoleInfoIntoDB(user, {
+    FatherName,
+    FatherNumber,
+    NIDNumber,
+    NIDFront,
+    NIDBack,
+  });
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "User profile updated successfully",
-    data: result,
+    data: [],
   });
 });
 

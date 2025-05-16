@@ -28,7 +28,7 @@ const createUser = z.object({
 
 
 const UpdateImage = z.object({
-  image: z.string().url().optional(),
+  image: z.string().url(),
 });
 
 const UpdateContactInfo = z.object({
@@ -37,17 +37,17 @@ const UpdateContactInfo = z.object({
   currentAddress: z.string().optional(),
 });
 
-const UdpateRoleInfo = z.object({
-  FatherName: z.string().optional(),
-  FatherNumber: z.string().optional(),
-  NIDNumber: z.string().optional(),
-  NIDFront: z.string().url().optional(),
-  NIDBack: z.string().url().optional(),
+const UpdateRoleInfo = z.object({
+  FatherName: z.string().nullable().optional(),
+  FatherNumber: z.string().nullable().optional(),
+  NIDNumber: z.string().nullable().optional(),
+  NIDFront: z.string().nullable().optional(),
+  NIDBack: z.string().nullable().optional(),
 });
 
 export const userValidation = {
   createUser,
   UpdateImage,
   UpdateContactInfo,
-  UdpateRoleInfo,
+  UpdateRoleInfo,
 }; 
