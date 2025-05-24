@@ -76,8 +76,10 @@ const CreateCardItems = async ({
   }
 };
 
-const getCardItems = async () => {
-  const items = await prisma.cardItem.findMany();
+const getCardItems = async (userId: string) => {
+  const items = await prisma.cardItem.findMany({
+    where: { UserId: userId },
+  });
   return items;
 };
 

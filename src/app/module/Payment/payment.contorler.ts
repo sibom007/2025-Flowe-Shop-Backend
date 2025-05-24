@@ -16,7 +16,7 @@ const CreateCardItems = catchAsync(async (req, res) => {
 });
 
 const GetCardItems = catchAsync(async (req, res) => {
-  const result = await PaymentService.getCardItems();
+  const result = await PaymentService.getCardItems(req.user.id);
   sendResponse(res, {
     statusCode: 200,
     success: true,
