@@ -36,6 +36,7 @@ model User {
   Flower     Flower[]
   orders     Order[]
   payments   Payment[]
+
 }
 
 
@@ -77,12 +78,11 @@ model Flower {
   rating      Float?
   likes       Int?
   commments   String[]
-
-  createdBy   User?   @relation(fields: [createdById], references: [id])
   createdById String? @db.ObjectId
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  createdBy   User?   @relation(fields: [createdById], references: [id])
 }
 
 enum FlowerCategory {
@@ -164,4 +164,20 @@ enum PaymentStatus {
   PENDING
   SUCCESS
   FAILED
+}
+
+
+
+// Card items
+
+model CardItem {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  UserId     String   @db.ObjectId // 👈 Add this line
+  FlowerIds  String[] @db.ObjectId
+  Quantity   Int
+  TotalPrice Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([UserId])
 }
