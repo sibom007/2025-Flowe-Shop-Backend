@@ -80,7 +80,7 @@ const getCardItems = async (userId: string) => {
   const items = await prisma.cardItem.findMany({
     where: { UserId: userId },
   });
-  return items;
+  return items[0];
 };
 
 export const deleteCardItems = async ({ FlowerId }: { FlowerId: string }) => {
